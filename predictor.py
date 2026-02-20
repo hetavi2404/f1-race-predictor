@@ -1,6 +1,10 @@
 import json
 import random
 
+def load_tracks():
+    with open("data/tracks.json", "r") as file:
+        return json.load(file)
+
 def load_drivers():
     with open("data/drivers.json", "r") as file:
         return json.load(file)
@@ -16,11 +20,23 @@ def calculate_score(driver, track_factor, weather_factor):
     variability = random.randint(-5, 5)
     return base_score + variability
 
-def simulate_race():
+def get_track_factor(track_name):
+    tracks = load_tracks()
+    for track in tracks:
+        if track["name"].lower() == track_name.lower():
+            return track["track_factor"]
+    return 90   #default fallback
+
+def get_weather_factor(weather):
+    if weather.lower() == "wet":
+        return 95   
+    return 85   #default fallback
+
+def simulate_race(track_name, weather):
     drivers = load_drivers()
 
-    track_factor = 90
-    weather_factor = 85
+    track_factor = get_track_factor(track_name)
+    weather_factor = get_weather_factor(weather)
 
     results = []
 
@@ -40,7 +56,7 @@ def simulate_race():
     return final_results
 
 if __name__ == "__main__":
-    race = simulate_race()
+    race = simulate_race("Monaco", "dry")
 
     print("\nRace Results\n")
     for position, result in enumerate(race, start=1):

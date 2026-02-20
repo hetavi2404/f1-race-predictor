@@ -1,13 +1,9 @@
+import json
 import random
 
-#sample driver data (temporary — later from JSON/API)
-drivers = [
-    {"name": "Verstappen", "performance": 95, "team": 94},
-    {"name": "Hamilton", "performance": 92, "team": 90},
-    {"name": "Leclerc", "performance": 90, "team": 89},
-    {"name": "Norris", "performance": 88, "team": 87},
-    {"name": "Alonso", "performance": 89, "team": 86},
-]
+def load_drivers():
+    with open("data/drivers.json", "r") as file:
+        return json.load(file)
 
 def calculate_score(driver, track_factor, weather_factor):
     base_score = (
@@ -17,12 +13,12 @@ def calculate_score(driver, track_factor, weather_factor):
         weather_factor * 0.1
     )
 
-    #controlled randomness
     variability = random.randint(-5, 5)
-
     return base_score + variability
 
 def simulate_race():
+    drivers = load_drivers()
+
     track_factor = 90
     weather_factor = 85
 
@@ -32,10 +28,8 @@ def simulate_race():
         score = calculate_score(driver, track_factor, weather_factor)
         results.append((driver["name"], score))
 
-    #sort by score descending
     results.sort(key=lambda x: x[1], reverse=True)
 
-    #assign points
     points_system = [25,18,15,12,10,8,6,4,2,1]
 
     final_results = []

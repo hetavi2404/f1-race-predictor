@@ -1,0 +1,6 @@
+[
+    {"name": "Monaco", "track_factor": 95},
+    {"name": "Silverstone", "track_factor": 90},
+    {"name": "Spa", "track_factor": 92},
+    {"name": "Suzuka", "track_factor": 93}
+]

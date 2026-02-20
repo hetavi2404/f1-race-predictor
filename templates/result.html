@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Race Results</title>
+</head>
+<body>
+    <h1>🏁 Race Results</h1>
+
+    <p><b>Track:</b> {{ track }}</p>
+    <p><b>Weather:</b> {{ weather }}</p>
+
+    <table border="1">
+        <tr>
+            <th>Position</th>
+            <th>Driver</th>
+            <th>Score</th>
+            <th>Points</th>
+        </tr>
+
+        {% for result in results %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ result[0] }}</td>
+            <td>{{ result[1] }}</td>
+            <td>{{ result[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/">Simulate Another Race</a>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>F1 Race Predictor</title>
+</head>
+<body>
+    <h1>🏎️ F1 Race Predictor</h1>
+
+    <form action="/predict" method="POST">
+
+        <label>Select Track:</label>
+        <select name="track">
+            {% for track in tracks %}
+                <option value="{{ track.name }}">{{ track.name }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>Weather:</label>
+        <select name="weather">
+            <option value="dry">Dry</option>
+            <option value="wet">Wet</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Predict Race</button>
+
+    </form>
+</body>
+</html>

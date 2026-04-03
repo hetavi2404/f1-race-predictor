@@ -1,0 +1,150 @@
+{
+  "modifiers": {
+    "Monaco": {
+      "description": "Tight street circuit \u2014 rewards precision, punishes overtaking styles",
+      "quali_weight": 1.4,
+      "overtaking_penalty": 0.85,
+      "street_circuit": true
+    },
+    "Monza": {
+      "description": "High-speed temple of speed \u2014 rewards straight-line performance",
+      "quali_weight": 1.1,
+      "slipstream_bonus": 1.05,
+      "street_circuit": false
+    },
+    "Spa": {
+      "description": "High-speed mixed circuit \u2014 rewards downforce and wet-weather skill",
+      "quali_weight": 1.05,
+      "wet_sensitivity": 1.2,
+      "street_circuit": false
+    },
+    "Silverstone": {
+      "description": "High-speed flowing corners \u2014 rewards aerodynamic balance",
+      "quali_weight": 1.1,
+      "street_circuit": false
+    },
+    "Bahrain": {
+      "description": "Desert circuit \u2014 good overtaking, high tyre degradation",
+      "quali_weight": 1.0,
+      "tyre_deg_sensitivity": 1.1,
+      "street_circuit": false
+    },
+    "Suzuka": {
+      "description": "Technical flowing circuit \u2014 rewards driver skill",
+      "quali_weight": 1.15,
+      "street_circuit": false
+    },
+    "Interlagos": {
+      "description": "Anti-clockwise, hilly \u2014 high overtaking potential",
+      "quali_weight": 0.95,
+      "overtaking_bonus": 1.05,
+      "street_circuit": false
+    },
+    "default": {
+      "description": "Standard circuit",
+      "quali_weight": 1.0,
+      "street_circuit": false
+    }
+  },
+  "weather_modifiers": {
+    "wet": {
+      "description": "Wet / heavy rain conditions",
+      "driver_skill_bonus": {
+        "HAM": 1.15,
+        "VER": 1.12,
+        "ALO": 1.1,
+        "RUS": 1.05,
+        "SAI": 1.03
+      },
+      "default_multiplier": 0.97
+    },
+    "light_rain": {
+      "description": "Light rain / damp track",
+      "driver_skill_bonus": {
+        "HAM": 1.07,
+        "VER": 1.06,
+        "ALO": 1.05
+      },
+      "default_multiplier": 0.99
+    },
+    "dry": {
+      "description": "Dry conditions",
+      "driver_skill_bonus": {},
+      "default_multiplier": 1.0
+    }
+  },
+  "circuits": {
+    "Melbourne": {
+      "event_name": "Australian Grand Prix"
+    },
+    "Shanghai": {
+      "event_name": "Chinese Grand Prix"
+    },
+    "Suzuka": {
+      "event_name": "Japanese Grand Prix"
+    },
+    "Sakhir": {
+      "event_name": "Bahrain Grand Prix"
+    },
+    "Jeddah": {
+      "event_name": "Saudi Arabian Grand Prix"
+    },
+    "Miami Gardens": {
+      "event_name": "Miami Grand Prix"
+    },
+    "Imola": {
+      "event_name": "Emilia Romagna Grand Prix"
+    },
+    "Monaco": {
+      "event_name": "Monaco Grand Prix"
+    },
+    "Barcelona": {
+      "event_name": "Spanish Grand Prix"
+    },
+    "Montr\u00e9al": {
+      "event_name": "Canadian Grand Prix"
+    },
+    "Spielberg": {
+      "event_name": "Austrian Grand Prix"
+    },
+    "Silverstone": {
+      "event_name": "British Grand Prix"
+    },
+    "Spa-Francorchamps": {
+      "event_name": "Belgian Grand Prix"
+    },
+    "Budapest": {
+      "event_name": "Hungarian Grand Prix"
+    },
+    "Zandvoort": {
+      "event_name": "Dutch Grand Prix"
+    },
+    "Monza": {
+      "event_name": "Italian Grand Prix"
+    },
+    "Baku": {
+      "event_name": "Azerbaijan Grand Prix"
+    },
+    "Marina Bay": {
+      "event_name": "Singapore Grand Prix"
+    },
+    "Austin": {
+      "event_name": "United States Grand Prix"
+    },
+    "Mexico City": {
+      "event_name": "Mexico City Grand Prix"
+    },
+    "S\u00e3o Paulo": {
+      "event_name": "S\u00e3o Paulo Grand Prix"
+    },
+    "Las Vegas": {
+      "event_name": "Las Vegas Grand Prix"
+    },
+    "Lusail": {
+      "event_name": "Qatar Grand Prix"
+    },
+    "Yas Island": {
+      "event_name": "Abu Dhabi Grand Prix"
+    }
+  }
+}

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Race Calendar {{ year }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --red: #e8002d;
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --bg3: #1a1a1a;
+            --border: #2a2a2a;
+            --text: #f0f0f0;
+            --muted: #666;
+            --gold: #ffd700;
+            --green: #00d47b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Barlow', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--bg2);
+            border-bottom: 2px solid var(--red);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo-f1 {
+            background: var(--red);
+            color: white;
+            padding: 2px 8px;
+            font-size: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-nav {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 6px 14px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-nav:hover,
+        .btn-nav.active {
+            border-color: var(--red);
+            color: var(--text);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 2.2rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .page-title span {
+            color: var(--red);
+        }
+
+        .year-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .year-tab {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            padding: 5px 14px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .year-tab:hover,
+        .year-tab.active {
+            border-color: var(--red);
+            color: var(--text);
+        }
+
+        /* ── Race cards grid ── */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .race-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: 1.2rem 1.4rem;
+            transition: border-color 0.2s, transform 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .race-card:hover {
+            border-color: #444;
+            transform: translateY(-2px);
+        }
+
+        .race-card.past {
+            opacity: 0.5;
+        }
+
+        .race-card.next {
+            border-color: var(--red);
+            box-shadow: 0 0 0 1px var(--red);
+        }
+
+        .next-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--red);
+            color: white;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+        }
+
+        .sprint-badge {
+            display: inline-block;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 1px 6px;
+            margin-left: 6px;
+            vertical-align: middle;
+            opacity: 0.8;
+        }
+
+        .round-num {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .race-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+        }
+
+        .race-location {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .race-date {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .days-away {
+            font-size: 0.78rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .days-away.soon {
+            color: var(--red);
+        }
+
+        .days-away.upcoming {
+            color: var(--green);
+        }
+
+        .days-away.future {
+            color: var(--muted);
+        }
+
+        /* ── Sessions list ── */
+        .sessions {
+            border-top: 1px solid var(--border);
+            padding-top: 0.7rem;
+            margin-top: 0.2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px 12px;
+        }
+
+        .session-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.76rem;
+        }
+
+        .session-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .session-label.race-label {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .session-label.sprint-label {
+            color: var(--gold);
+        }
+
+        .session-time {
+            color: var(--text);
+            font-size: 0.75rem;
+        }
+
+        /* ── Predict button ── */
+        .btn-predict-race {
+            display: block;
+            width: 100%;
+            margin-top: 0.9rem;
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 8px 0;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-predict-race:hover {
+            background: #c0001f;
+        }
+
+        .btn-predict-race.past-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .btn-predict-race.past-btn:hover {
+            border-color: #555;
+            color: var(--text);
+        }
+
+        /* ── Error banner ── */
+        .error-banner {
+            background: #1a0000;
+            border-left: 4px solid var(--red);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #ff6b6b;
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .empty-state code {
+            background: var(--bg3);
+            padding: 2px 6px;
+            color: var(--gold);
+            font-size: 0.85rem;
+        }
+
+        /* ── Stats bar ── */
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .stat-value {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .race-card {
+            animation: cardIn 0.3s ease both;
+        }
+
+            {
+            % for i in range(30) %
+        }
+
+        .race-card:nth-child({
+                {
+                i + 1
+            }
+
+        }) {
+            animation-delay: {
+                    {
+                    i * 0.04
+                }
+            }
+
+            s;
+        }
+
+            {
+            % endfor %
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 1rem;
+            }
+
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <span class="logo-f1">F1</span>
+            Race Predictor
+        </div>
+        <div class="header-actions">
+            <a href="/calendar" class="btn-nav active">Calendar</a>
+            <a href="/" class="btn-nav">Standings</a>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="page-header">
+            <div class="page-title">
+                <span>{{ year }}</span> Season Calendar
+            </div>
+            <div class="year-tabs">
+                {% for y in years %}
+                <a href="/calendar?year={{ y }}" class="year-tab {% if y == year %}active{% endif %}">{{ y }}</a>
+                {% endfor %}
+                {% set next_year = year + 1 %}
+                <a href="/calendar?year={{ next_year }}" class="year-tab">{{ next_year }}</a>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="error-banner">
+            Could not load calendar: {{ error }}<br>
+            <small>Make sure FastF1 is installed: <code>pip install fastf1</code></small>
+        </div>
+        {% endif %}
+
+        {% if events %}
+        {% set past_count = events | selectattr("is_past") | list | length %}
+        {% set upcoming_count = events | rejectattr("is_past") | list | length %}
+
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-value">{{ events | length }}</span>
+                <span class="stat-label">Total races</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">{{ past_count }}</span>
+                <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">{{ upcoming_count }}</span>
+                <span class="stat-label">Remaining</span>
+            </div>
+            {% if upcoming_idx is not none %}
+            <div class="stat">
+                <span class="stat-value" style="color: var(--red);">
+                    R{{ events[upcoming_idx].round }}
+                </span>
+                <span class="stat-label">Next race</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="calendar-grid">
+            {% for event in events %}
+            <div class="race-card
+      {% if event.is_past %}past{% endif %}
+      {% if loop.index0 == upcoming_idx %}next{% endif %}">
+
+                {% if loop.index0 == upcoming_idx %}
+                <div class="next-badge">Next Race</div>
+                {% endif %}
+
+                <div class="round-num">Round {{ event.round }}</div>
+
+                <div class="race-name">
+                    {{ event.event_name }}
+                    {% if event.is_sprint %}
+                    <span class="sprint-badge">Sprint</span>
+                    {% endif %}
+                </div>
+
+                <div class="race-location">{{ event.location }}, {{ event.country }}</div>
+                <div class="race-date">{{ event.date }}</div>
+
+                {% if not event.is_past and event.days_away is not none %}
+                {% if event.days_away <= 7 %} <div class="days-away soon">{{ event.days_away }} day{% if event.days_away
+                    != 1 %}s{% endif %} away
+            </div>
+            {% elif event.days_away <= 30 %} <div class="days-away upcoming">{{ event.days_away }} days away
+        </div>
+        {% else %}
+        <div class="days-away future">{{ event.days_away }} days away</div>
+        {% endif %}
+        {% elif event.is_past %}
+        <div class="days-away future">Completed</div>
+        {% endif %}
+
+        {% if event.sessions %}
+        <div class="sessions">
+            {% for label, time in event.sessions.items() %}
+            <div class="session-row">
+                <span class="session-label
+            {% if label == 'Race' %}race-label
+            {% elif label == 'Sprint' %}sprint-label
+            {% endif %}">{{ label }}</span>
+                <span class="session-time">{{ time }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <a href="/predict?race={{ event.event_name | urlencode }}&year={{ year }}"
+            class="btn-predict-race {% if event.is_past %}past-btn{% endif %}">
+            {% if event.is_past %}View prediction{% else %}Predict this race{% endif %}
+        </a>
+
+        </div>
+        {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="empty-state">
+            No calendar data found for {{ year }}.<br><br>
+            FastF1 may not have the schedule yet, or try a different year.<br>
+            Make sure FastF1 is up to date: <code>pip install --upgrade fastf1</code>
+        </div>
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>
